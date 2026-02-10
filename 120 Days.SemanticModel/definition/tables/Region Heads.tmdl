@@ -1,0 +1,35 @@
+table 'Region Heads'
+	lineageTag: c4cbd2b7-0f09-49a4-8e4c-c0aed98699ac
+
+	column Person
+		dataType: string
+		lineageTag: 7115b2e1-b443-4b61-8bbc-8fb6f7561e86
+		summarizeBy: none
+		sourceColumn: Person
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 83e0cbaf-7020-4294-9a1a-7e5d315dd2c0
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Region Heads' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Goutham\Desktop\Power BI Case Study.xlsx"), null, true),
+				    #"Region Heads_Sheet" = Source{[Item="Region Heads",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Region Heads_Sheet",{{"Column1", type text}, {"Column2", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"Person", type text}, {"Region", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

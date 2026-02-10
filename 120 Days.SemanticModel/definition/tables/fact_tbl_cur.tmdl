@@ -1,0 +1,125 @@
+table fact_tbl_cur
+	lineageTag: 7bee21d0-bcd6-41c9-abac-9ef0078b768d
+
+	measure 'Is Filtered' =
+			
+			
+			ISFILTERED(dim_tbl_cur[Country])
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7db6231c-5240-48bc-933e-cd3f53a7b9fc
+
+	measure 'Has One Value' = HASONEVALUE(dim_tbl_cur[Country])
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d065e916-8488-41b2-8583-5bd2f92738d9
+
+	measure 'Correct Amount' =
+			
+			
+			IF(
+			    HASONEVALUE(dim_tbl_cur[Country]),
+			    SUM(fact_tbl_cur[Amount in Local Currency]),
+			    SUM(fact_tbl_cur[Amount in Global Currency])
+			)
+		lineageTag: 5e9dbd80-4bd4-4966-ab51-55e6687586fa
+
+		formatStringDefinition = ```
+				IF(
+				    HASONEVALUE(dim_tbl_cur[Country]),
+				    SELECTEDVALUE(dim_tbl_cur[Currency Symbol]) & " #,##0.00",
+				    "$ #,##0.00"
+				)
+				
+				```
+
+	column 'Order Id'
+		dataType: string
+		lineageTag: 0a1869c1-2377-41ac-af8d-1ba53675df0a
+		summarizeBy: none
+		sourceColumn: Order Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Id'
+		dataType: string
+		lineageTag: d4d27447-15be-4217-a0ef-c027aebb0fed
+		summarizeBy: none
+		sourceColumn: Customer Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Id'
+		dataType: string
+		lineageTag: 5e880855-3020-4d41-be9f-9a195fc8dcbc
+		summarizeBy: none
+		sourceColumn: Product Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Amount in Global Currency'
+		dataType: int64
+		formatString: 0
+		lineageTag: 90d3e763-2f69-4e56-b38c-edde5c4a999d
+		summarizeBy: sum
+		sourceColumn: Amount in Global Currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 006b6240-a6b9-4775-b57a-46a37ce8ba79
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column City
+		dataType: string
+		lineageTag: 1778c865-5bc6-4988-abcb-5174e514116c
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: f018604b-2f73-4082-adac-040d985ccdc0
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Conversion Factor' = RELATED(dim_tbl_cur[Conversion Factor to USD])
+		lineageTag: cfb70833-b346-4ae5-b609-20eae1da5cf0
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Amount in Local Currency' = fact_tbl_cur[Amount in Global Currency] / fact_tbl_cur[Conversion Factor]
+		formatString: 0.00
+		lineageTag: d333d739-5cb5-4788-b966-4d05ebb59e4d
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_tbl_cur = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("bZbRbts4EEV/xfCzC4ikZMuPcYJNu62ToOlusSj6QFusRaxMBrS0qf9+xRlrxJENRLgIibmSLw85/PFj/pxlmZgv5vcC5Mm8z/7x4d/F7K/Xu/7/F4HTRf8ImWW9yEwWHzLxISvmPxdoINEgyrY77rRdzD65yuqLQRxX/VMWrH5F9Qrro3zxrvKuf/3nS3EcXMUy/naRUXWO1VG++eBd6xeze+10Nbw/zsRvEAW3kGRRoEWU13PlzHkxu+tObdAN/Yg4F41EyU1yMlmiCUht9/rg0xTjcHyk4PVjiiusj/JgmnoSYhwu+2fNy5dUXmJ5lK12+9qcWhOSIONEXMoVNxhXYY0GUf7uDXz3X6xnSa4HFJbcpBxMRAYmIFvT7HwXnLkKE6ajl5ysyJp8kEmQV+1mf4T+i+xpn0YKkxEPwTORhIZAMEE2xh1004WOxQpTMVrBl0UK8kA4QTY2HK071Po45goTAEbOHYgugYCi6Oagw5nHCjORDbFiO0QqskBAQV5MaOvrSIsL5JMsCE+BeIJs/KmFTUZRLi90Sb6wkugUSCfIx3Nlgt7pike5GuBQ3IMQFYgoyBdjqlOSYjkQMUmR8BSIJ8i23+TB6GYS43rgoeAxEp0S6QS5q0yjbXUNJ8ziavBPITglwgnyanTbNibJEoYBiGXyGbK3oHrEEuSli/sjiVESkZKXE08SiQTZBNsvZTMGCaPAAa8mlCTSCPLctvpd8xRhApYx5w5EkkQYQR59U83uvT611zkWA1MpDzLpGxKRBHnQTaNPaYw3D8y+nHCSiCRKbZyb9B2YWE93pkwaj0QgQZ582073thzOzCU3GIFCKEG29nTq/3R3mCZKXCqeKAGlkEuQj36nw3WaMAdUSfYtYx9USCXIXdto1+okThjGPso+QhCVCqkE+ez3k/4Dw4CF4PWEpUIsQZ5///KhGoOEQdhTPElBWCrEEmQT9PENDqg0RjW08XXJLIhLhVyiaLczIejrHIlKjtXYhxVSCbK1+mjTFJfDMbXiKRCUCqEE+VPbty7wGFfDMmb89cSkQiZBLjexIcTy1sEkk+6rEEeQr3ZfH/vL1CREYnGCAbGYI4sgDzq8W3eVIczdOCLGxpsjiyAPxsFFgkLMCUW+H8aemyOKIN9C/0POLEQYh2OS1xOKOaKIoo+7YKuDGYPMqWXzk2nstznSCPJd9/eoxk8ulTn1bH7Kjw03RxxBHo1pvDtcJ1kMPBXchWjMkUaQl9obZ3+nUS6HlSh5PfGYI48gT95Wmic53CrZ1VgmbTdHHEG+Gl3Z+CsoyHKgiW+msePmSCTIY2eat3oS43p+4+qjkmZZII8g330TY7yVZEHnY3rCKGibP/8H", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Order Id" = _t, #"Customer Id" = _t, Region = _t, #"Product Id" = _t, Quantity = _t, Price = _t, Date = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Order Id", type text}, {"Customer Id", type text}, {"Region", type text}, {"Product Id", type text}, {"Quantity", Int64.Type}, {"Price", Int64.Type}, {"Date", type date}}),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Changed Type", "Region", Splitter.SplitTextByEachDelimiter({","}, QuoteStyle.Csv, false), {"Region.1", "Region.2"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Region.1", type text}, {"Region.2", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"Region.1", "City"}, {"Region.2", "Country"}, {"Price", "Amount in Global Currency"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns",{"Quantity"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

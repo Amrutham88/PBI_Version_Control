@@ -1,0 +1,44 @@
+relationship 138f6ffa-8b9f-496f-8d18-aa8d21e1d4df
+	fromColumn: Orders.'Customer ID'
+	toColumn: Customer.'Customer ID'
+
+relationship 0f1ccbb5-2850-4fec-9ad4-dcfa3dc4b9a5
+	fromColumn: Orders.Region
+	toColumn: 'Region Heads'.Region
+
+relationship 2d92315c-9687-47df-96f2-68853c587e7e
+	fromColumn: Orders.'Product ID'
+	toColumn: Product.'Product ID'
+
+relationship f7f0283a-2ab2-447b-b45e-0a9b10363b69
+	fromColumn: Orders.'Order ID'
+	toColumn: Returns.'Order ID'
+
+relationship 15eb9e3b-2c22-44b9-bf9f-b77c3fb5a071
+	crossFilteringBehavior: bothDirections
+	fromColumn: Orders.'Concat1 '
+	toColumn: 'Sales Target'.Concat1
+
+relationship 8ef32b9f-07ba-4a0d-baec-b16e57856a2d
+	fromColumn: Orders.SalesPerson
+	toColumn: SalesPerson.Sales_person
+
+relationship 001cb049-08dc-0018-4b03-99ec2482dd5c
+	fromColumn: fact_tbl_cur.City
+	toColumn: dim_tbl_cur.City
+
+relationship e90d2b2e-b960-470f-a67e-eae93d631dac
+	fromColumn: Orders.'Order Date'
+	toColumn: Calendar.Date
+
+relationship 8cf2a7d0-9079-bbb7-05da-53ae64e648b0
+	toCardinality: many
+	fromColumn: Calendar.Year
+	toColumn: Time_Master.Year
+
+relationship 7a10bc22-421a-0d37-52da-ad130f1e4a78
+	isActive: false
+	toCardinality: many
+	fromColumn: Calendar.'Month Year'
+	toColumn: Time_Master.'Month Year'
+

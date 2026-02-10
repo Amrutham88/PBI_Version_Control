@@ -1,0 +1,132 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "b92eca0288c7612c0ac9",
+  "position": {
+    "x": 640.49420849420846,
+    "y": 0,
+    "z": 2000,
+    "height": 188.95806150978564,
+    "width": 639.26720809479434,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "lineClusteredColumnComboChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Product"
+                    }
+                  },
+                  "Property": "Sub-Category"
+                }
+              },
+              "queryRef": "Product.Sub-Category",
+              "nativeQueryRef": "Sub-Category",
+              "active": true
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "NativeVisualCalculation": {
+                  "Language": "dax",
+                  "Expression": "\r\n\r\nRANKX(\r\n    ROWS,\r\n    [Total Sales],,DESC,Dense\r\n)",
+                  "Name": "Rank"
+                }
+              },
+              "queryRef": "select",
+              "nativeQueryRef": "Rank"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures Table"
+                    }
+                  },
+                  "Property": "Total Sales"
+                }
+              },
+              "queryRef": "Measures Table.Total Sales",
+              "nativeQueryRef": "Total Sales"
+            }
+          ]
+        },
+        "Y2": {
+          "projections": [
+            {
+              "field": {
+                "NativeVisualCalculation": {
+                  "Language": "dax",
+                  "Expression": "\nvar val1 = [Rank]\n\nvar val2 = \nCALCULATE(\n    SUM([Total Sales]), FILTER(ROWS, [Rank] <= val1)\n)\n\nvar val3 = SUMX(ROWS, [Total Sales])\nRETURN\nDIVIDE(val2, val3)\n",
+                  "Name": "Pareto chart"
+                }
+              },
+              "queryRef": "select1",
+              "nativeQueryRef": "Pareto chart",
+              "format": "0.00%;-0.00%;0.00%"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "NativeVisualCalculation": {
+                "Language": "dax",
+                "Expression": "\r\n\r\nRANKX(\r\n    ROWS,\r\n    [Total Sales],,DESC,Dense\r\n)",
+                "Name": "Rank"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "valueAxis": [
+        {
+          "properties": {
+            "end": {
+              "expr": {
+                "SelectRef": {
+                  "ExpressionName": "select"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Pareto Chart with Rank'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

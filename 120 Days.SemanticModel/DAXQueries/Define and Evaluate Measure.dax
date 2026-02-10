@@ -1,0 +1,11 @@
+DEFINE
+    MEASURE 'Measures Table'[Margin %] = DIVIDE(
+    [Total Profit],
+    [Total Sales],
+    0
+)
+
+EVALUATE
+    SUMMARIZECOLUMNS(
+        "Margin %", [Margin %]
+    )

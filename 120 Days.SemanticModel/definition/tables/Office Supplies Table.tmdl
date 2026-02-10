@@ -1,0 +1,64 @@
+table 'Office Supplies Table'
+	lineageTag: 24604e5c-a129-4fe7-86b0-3ef7bec7afdd
+
+	measure 'Measure 2' =
+			
+			
+			
+			CALCULATE(
+			    SUM(Orders[Sales Amount])
+			    ,'Product'[Category] = "Office Supplies"
+			)
+		lineageTag: 288372cc-d4e0-4df3-8deb-7d92c961040f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Category
+		lineageTag: 7032874a-2655-4e07-940f-840ec8d861b1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Product[Category]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sub-Category
+		lineageTag: 50a88ee9-9d14-4a9f-a13e-a6365e7be0f2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Product[Sub-Category]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Name'
+		lineageTag: c1b78044-1bf7-438e-9386-a319143336dd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Product[Product Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		lineageTag: 37698477-3875-4358-bc8e-083a1a34c97e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Product[Product ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Category (groups)'
+		lineageTag: 9aa6c723-f854-4fd4-99a9-e50a760fdb73
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Product[Category (groups)]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Office Supplies Table' = calculated
+		mode: import
+		source =
+				
+				
+				'Product'
+
+	annotation PBI_Id = 797e20a0b8424516adb87b4edae0c2de
+

@@ -1,0 +1,651 @@
+EVALUATE
+	UNION(
+		ROW(
+			"Table", "Orders",
+			"Column", "Row ID",
+			"Count", COUNT('Orders'[Row ID]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Row ID]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Row ID]),
+			"Min", MIN('Orders'[Row ID]),
+			"Max", MAX('Orders'[Row ID]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Order ID",
+			"Count", COUNT('Orders'[Order ID]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Order ID]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Order ID]),
+			"Min", MIN('Orders'[Order ID]),
+			"Max", MAX('Orders'[Order ID]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Order Date",
+			"Count", COUNT('Orders'[Order Date]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Order Date]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Order Date]),
+			"Min", MIN('Orders'[Order Date]),
+			"Max", MAX('Orders'[Order Date]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					'Orders'[Order Date] = 0
+				)),
+				0
+			),
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", DATEDIFF(
+				MIN('Orders'[Order Date]),
+				MAX('Orders'[Order Date]),
+				DAY
+			),
+			"Range in Months", DATEDIFF(
+				MIN('Orders'[Order Date]),
+				MAX('Orders'[Order Date]),
+				MONTH
+			),
+			"Range in Years", DATEDIFF(
+				MIN('Orders'[Order Date]),
+				MAX('Orders'[Order Date]),
+				YEAR
+			)
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Year",
+			"Count", COUNT('Orders'[Year]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Year]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Year]),
+			"Min", MIN('Orders'[Year]),
+			"Max", MAX('Orders'[Year]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Ship Mode",
+			"Count", COUNT('Orders'[Ship Mode]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Ship Mode]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Ship Mode]),
+			"Min", MIN('Orders'[Ship Mode]),
+			"Max", MAX('Orders'[Ship Mode]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Customer ID",
+			"Count", COUNT('Orders'[Customer ID]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Customer ID]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Customer ID]),
+			"Min", MIN('Orders'[Customer ID]),
+			"Max", MAX('Orders'[Customer ID]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Segment",
+			"Count", COUNT('Orders'[Segment]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Segment]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Segment]),
+			"Min", MIN('Orders'[Segment]),
+			"Max", MAX('Orders'[Segment]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Country",
+			"Count", COUNT('Orders'[Country]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Country]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Country]),
+			"Min", MIN('Orders'[Country]),
+			"Max", MAX('Orders'[Country]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "City",
+			"Count", COUNT('Orders'[City]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[City]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[City]),
+			"Min", MIN('Orders'[City]),
+			"Max", MAX('Orders'[City]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "State",
+			"Count", COUNT('Orders'[State]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[State]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[State]),
+			"Min", MIN('Orders'[State]),
+			"Max", MAX('Orders'[State]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Postal Code",
+			"Count", COUNT('Orders'[Postal Code]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Postal Code]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Postal Code]),
+			"Min", MIN('Orders'[Postal Code]),
+			"Max", MAX('Orders'[Postal Code]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Region",
+			"Count", COUNT('Orders'[Region]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Region]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Region]),
+			"Min", MIN('Orders'[Region]),
+			"Max", MAX('Orders'[Region]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Product ID",
+			"Count", COUNT('Orders'[Product ID]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Product ID]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Product ID]),
+			"Min", MIN('Orders'[Product ID]),
+			"Max", MAX('Orders'[Product ID]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Sales Amount",
+			"Count", COUNT('Orders'[Sales Amount]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Sales Amount]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Sales Amount]),
+			"Min", MIN('Orders'[Sales Amount]),
+			"Max", MAX('Orders'[Sales Amount]),
+			"Median", MEDIAN('Orders'[Sales Amount]),
+			"Mean", AVERAGE('Orders'[Sales Amount]),
+			"Standard Deviation", STDEV.P('Orders'[Sales Amount]),
+			"Zeros", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					'Orders'[Sales Amount] = 0
+				)),
+				0
+			),
+			"Evens", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Sales Amount],
+						2
+					) = 0
+				)),
+				0
+			),
+			"Odds", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Sales Amount],
+						2
+					) <> 0
+				)),
+				0
+			),
+			"P25", PERCENTILE.INC(
+				'Orders'[Sales Amount],
+				0.25
+			),
+			"P75", PERCENTILE.INC(
+				'Orders'[Sales Amount],
+				0.75
+			),
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Quantity",
+			"Count", COUNT('Orders'[Quantity]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Quantity]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Quantity]),
+			"Min", MIN('Orders'[Quantity]),
+			"Max", MAX('Orders'[Quantity]),
+			"Median", MEDIAN('Orders'[Quantity]),
+			"Mean", AVERAGE('Orders'[Quantity]),
+			"Standard Deviation", STDEV.P('Orders'[Quantity]),
+			"Zeros", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					'Orders'[Quantity] = 0
+				)),
+				0
+			),
+			"Evens", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Quantity],
+						2
+					) = 0
+				)),
+				0
+			),
+			"Odds", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Quantity],
+						2
+					) <> 0
+				)),
+				0
+			),
+			"P25", PERCENTILE.INC(
+				'Orders'[Quantity],
+				0.25
+			),
+			"P75", PERCENTILE.INC(
+				'Orders'[Quantity],
+				0.75
+			),
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Discount",
+			"Count", COUNT('Orders'[Discount]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Discount]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Discount]),
+			"Min", MIN('Orders'[Discount]),
+			"Max", MAX('Orders'[Discount]),
+			"Median", MEDIAN('Orders'[Discount]),
+			"Mean", AVERAGE('Orders'[Discount]),
+			"Standard Deviation", STDEV.P('Orders'[Discount]),
+			"Zeros", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					'Orders'[Discount] = 0
+				)),
+				0
+			),
+			"Evens", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Discount],
+						2
+					) = 0
+				)),
+				0
+			),
+			"Odds", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Discount],
+						2
+					) <> 0
+				)),
+				0
+			),
+			"P25", PERCENTILE.INC(
+				'Orders'[Discount],
+				0.25
+			),
+			"P75", PERCENTILE.INC(
+				'Orders'[Discount],
+				0.75
+			),
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Profit",
+			"Count", COUNT('Orders'[Profit]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Profit]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Profit]),
+			"Min", MIN('Orders'[Profit]),
+			"Max", MAX('Orders'[Profit]),
+			"Median", MEDIAN('Orders'[Profit]),
+			"Mean", AVERAGE('Orders'[Profit]),
+			"Standard Deviation", STDEV.P('Orders'[Profit]),
+			"Zeros", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					'Orders'[Profit] = 0
+				)),
+				0
+			),
+			"Evens", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Profit],
+						2
+					) = 0
+				)),
+				0
+			),
+			"Odds", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Profit],
+						2
+					) <> 0
+				)),
+				0
+			),
+			"P25", PERCENTILE.INC(
+				'Orders'[Profit],
+				0.25
+			),
+			"P75", PERCENTILE.INC(
+				'Orders'[Profit],
+				0.75
+			),
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "SalesPerson",
+			"Count", COUNT('Orders'[SalesPerson]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[SalesPerson]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[SalesPerson]),
+			"Min", MIN('Orders'[SalesPerson]),
+			"Max", MAX('Orders'[SalesPerson]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Returned (Y/N)",
+			"Count", COUNT('Orders'[Returned (Y/N)]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Returned (Y/N)]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Returned (Y/N)]),
+			"Min", MIN('Orders'[Returned (Y/N)]),
+			"Max", MAX('Orders'[Returned (Y/N)]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Month",
+			"Count", COUNT('Orders'[Month]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Month]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Month]),
+			"Min", MIN('Orders'[Month]),
+			"Max", MAX('Orders'[Month]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Concat1 ",
+			"Count", COUNT('Orders'[Concat1 ]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Concat1 ]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Concat1 ]),
+			"Min", MIN('Orders'[Concat1 ]),
+			"Max", MAX('Orders'[Concat1 ]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Sales Target",
+			"Count", COUNT('Orders'[Sales Target]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Sales Target]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Sales Target]),
+			"Min", MIN('Orders'[Sales Target]),
+			"Max", MAX('Orders'[Sales Target]),
+			"Median", MEDIAN('Orders'[Sales Target]),
+			"Mean", AVERAGE('Orders'[Sales Target]),
+			"Standard Deviation", STDEV.P('Orders'[Sales Target]),
+			"Zeros", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					'Orders'[Sales Target] = 0
+				)),
+				0
+			),
+			"Evens", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Sales Target],
+						2
+					) = 0
+				)),
+				0
+			),
+			"Odds", COALESCE(
+				COUNTROWS(FILTER(
+					'Orders',
+					MOD(
+						'Orders'[Sales Target],
+						2
+					) <> 0
+				)),
+				0
+			),
+			"P25", PERCENTILE.INC(
+				'Orders'[Sales Target],
+				0.25
+			),
+			"P75", PERCENTILE.INC(
+				'Orders'[Sales Target],
+				0.75
+			),
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "First Purchase Year",
+			"Count", COUNT('Orders'[First Purchase Year]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[First Purchase Year]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[First Purchase Year]),
+			"Min", MIN('Orders'[First Purchase Year]),
+			"Max", MAX('Orders'[First Purchase Year]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		),
+		ROW(
+			"Table", "Orders",
+			"Column", "Sales_Person_Name",
+			"Count", COUNT('Orders'[Sales_Person_Name]),
+			"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[Sales_Person_Name]),
+			"Null Count", COUNTROWS('Orders') - COUNT('Orders'[Sales_Person_Name]),
+			"Min", MIN('Orders'[Sales_Person_Name]),
+			"Max", MAX('Orders'[Sales_Person_Name]),
+			"Median", "N/A",
+			"Mean", "N/A",
+			"Standard Deviation", "N/A",
+			"Zeros", "N/A",
+			"Evens", "N/A",
+			"Odds", "N/A",
+			"P25", "N/A",
+			"P75", "N/A",
+			"Range in Days", "N/A",
+			"Range in Months", "N/A",
+			"Range in Years", "N/A"
+		)
+	)

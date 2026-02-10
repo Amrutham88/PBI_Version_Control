@@ -1,0 +1,88 @@
+table Product
+	lineageTag: f069c925-9ee1-4f25-93c4-8e086d2ac411
+
+	column Category
+		dataType: string
+		lineageTag: d1aaf330-09ee-4eab-9ee4-ea4dd1beea4b
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Product","TableItemName":"Category (groups)","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	column Sub-Category
+		dataType: string
+		lineageTag: 7706322d-82ee-44e2-ab29-2a812425b1d7
+		summarizeBy: none
+		sourceColumn: Sub-Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: d008f1d7-3c20-4292-9756-fe30994009e0
+		summarizeBy: none
+		sourceColumn: Product Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: 31385888-544c-4e24-a0c7-abbab4aa5470
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Category (groups)' =
+			SWITCH(
+				TRUE,
+				ISBLANK('Product'[Category]),
+				"(Blank)",
+				'Product'[Category] IN {"Furniture",
+					"Office Supplies"},
+				"Furniture & Office Supplies",
+				'Product'[Category]
+			)
+		lineageTag: 3c3c828d-97d5-48ec-b2e7-03d453e97a9b
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{
+				  "version": 0,
+				  "groupedColumns": [
+				    {
+				      "Column": {
+				        "Expression": {
+				          "SourceRef": {
+				            "Entity": "Product"
+				          }
+				        },
+				        "Property": "Category"
+				      }
+				    }
+				  ]
+				}
+
+		annotation GroupingDesignState = {"Version":0,"Sources":[{"Name":"p","Entity":"Product"}],"GroupedColumns":[{"Column":{"Expression":{"SourceRef":{"Source":"p"}},"Property":"Category"}}],"GroupItems":[{"DisplayName":"(Blank)","BlankDefaultPlaceholder":true},{"DisplayName":"Furniture & Office Supplies","Expression":{"In":{"Expressions":[{"Column":{"Expression":{"SourceRef":{"Source":"p"}},"Property":"Category"}}],"Values":[[{"Literal":{"Value":"'Furniture'"}}],[{"Literal":{"Value":"'Office Supplies'"}}]]}}}]}
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Goutham\Desktop\Power BI Case Study.xlsx"), null, true),
+				    Product_Sheet = Source{[Item="Product",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Product_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"Category", type text}, {"Sub-Category", type text}, {"Product Name", type text}, {"Product ID", type text}}),
+				    #"Filled Down" = Table.FillDown(#"Changed Type1",{"Category", "Sub-Category"})
+				in
+				    #"Filled Down"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

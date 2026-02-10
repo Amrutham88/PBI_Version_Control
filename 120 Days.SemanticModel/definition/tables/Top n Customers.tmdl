@@ -1,0 +1,124 @@
+table 'Top n Customers'
+	lineageTag: f8b7c3c3-b21f-499a-abbb-ddc1e3eb4206
+
+	column 'Customer ID'
+		lineageTag: 1cc1d0d5-3f12-43dd-9a60-9a5cbfee990e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Customer[Customer ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Name'
+		lineageTag: 6ec1f097-0633-48d1-9bb9-f8353ac12f19
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Customer[Customer Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Top n' =
+			
+			RANKX(
+			    ALL(
+			        Customer[Customer Name]
+			    ),
+			    [Total Sales],
+			    ,
+			    DESC,
+			    Skip
+			)
+		formatString: 0
+		lineageTag: 1bfa559b-e2bc-4ba6-b924-d27e3c3076f4
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column
+		lineageTag: 73122b2d-43dd-4cd9-a753-4da0fae8cf9c
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Customer[Column]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Rank
+		formatString: 0
+		lineageTag: 166276d9-86e5-4c2a-a53b-537109a864b6
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Customer[Rank]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rating for Monetary'
+		formatString: 0
+		lineageTag: f2a56bcc-1e39-43a3-95a7-20620b11d97b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Customer[Rating for Monetary]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rating for Frequency'
+		formatString: 0
+		lineageTag: d5103daa-d4b2-48ab-b19f-6651ebd1561a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Customer[Rating for Frequency]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rating for Recency'
+		lineageTag: 4f18c2e9-50e2-4624-8f41-05faf9764b43
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Customer[Rating for Recency]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Last 180 days Sales'
+		lineageTag: 34e82752-bf77-4633-987c-3cc169171aad
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Customer[Last 180 days Sales]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Final Rating (RFM)'
+		lineageTag: 81503813-c13c-4350-80be-633dcd4eec9a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Customer[Final Rating (RFM)]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Segmentation
+		lineageTag: 7377ae50-5229-4f9a-85ad-b192379fe869
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Customer[Segmentation]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Top n Customers' = calculated
+		mode: import
+		source =
+				
+				TOPN(
+				    10,
+				    Customer,
+				    [Total Sales],
+				    DESC
+				)
+
+	annotation PBI_Id = 51c3c5e150724c18bf40323ff44ed67e
+

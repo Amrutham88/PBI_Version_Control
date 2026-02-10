@@ -1,0 +1,97 @@
+function YoY_Value = ```
+		(_measure:expr) =>
+		var _mindate = MIN('Calendar'[Date])
+		var _prevyearmindate = DATE(YEAR(_mindate)-1, MONTH(_mindate), DAY(_mindate))
+		var _maxdate = MAX('Calendar'[Date])
+		var _prevyearmaxdate = DATE(YEAR(_maxdate)-1, MONTH(_maxdate), DAY(_maxdate))
+		var _prevyeardaterange = DATESBETWEEN('Calendar'[Date], _prevyearmindate, _prevyearmaxdate)
+		var _prevyearvalue = CALCULATE(_measure,_prevyeardaterange,ALLEXCEPT('Calendar', 'Calendar'[Date]))
+		var _formatted = 
+		SWITCH(
+			TRUE(),
+			_prevyearvalue >= 1e9, FORMAT(_prevyearvalue / 1e9, "0.00") & "bn",
+			_prevyearvalue >= 1e6, FORMAT(_prevyearvalue / 1e6, "0.00") & "M",
+			_prevyearvalue >= 1e3, FORMAT(_prevyearvalue / 1e3, "0.00") & "K",
+			FORMAT(_prevyearvalue,"0.00")
+		)
+		return
+		"YoY: " & _formatted
+		```
+	lineageTag: 90b0f131-75e0-470c-81ed-858d82ac9f4d
+
+function YoY_Change =
+		(_measure:expr) =>
+		var _mindate = MIN('Calendar'[Date])
+		var _prevyearmindate = DATE(YEAR(_mindate)-1,MONTH(_mindate), DAY(_mindate))
+		var _maxdate = MAX('Calendar'[Date])
+		var _prevyearmaxdate = DATE(YEAR(_maxdate)-1,MONTH(_maxdate), DAY(_maxdate))
+		var _prevyeardaterange = DATESBETWEEN('Calendar'[Date], _prevyearmindate, _prevyearmaxdate)
+		var _prevyearvalue = CALCULATE(_measure, _prevyeardaterange)
+		var _diff = _measure - _prevyearvalue
+		var _pct = DIVIDE(_diff, _prevyearvalue)
+		
+		RETURN
+		_pct
+	lineageTag: db59a57e-9553-4334-bc55-54d85715129c
+
+function YoY_Color =
+		(_measure:expr) =>
+		var _mindate = MIN('Calendar'[Date])
+		var _prevyearmindate = DATE(YEAR(_mindate)-1,MONTH(_mindate), DAY(_mindate))
+		var _maxdate = MAX('Calendar'[Date])
+		var _prevyearmaxdate = DATE(YEAR(_maxdate)-1,MONTH(_maxdate), DAY(_maxdate))
+		var _prevyeardaterange = DATESBETWEEN('Calendar'[Date], _prevyearmindate, _prevyearmaxdate)
+		var _prevyearvalue = CALCULATE(_measure, _prevyeardaterange)
+		var _diff = _measure - _prevyearvalue
+		var _pct = DIVIDE(_diff, _prevyearvalue)
+		
+		RETURN
+		IF(_pct>=0, "Green", "Red")
+	lineageTag: 9fd35b6f-d341-48ee-a0b7-d4651fe6588c
+
+function Number_Format = ```
+		(_measure:expr) =>
+		var _absvalue = ABS(_measure)
+		var _formatted = 
+		SWITCH(
+			TRUE(),
+			_absvalue >= 1e9, FORMAT(_measure, "#,##0,,,.00") & " bn",
+			_absvalue >= 1e6, FORMAT(_measure, "#,##0,,.00") & " M",
+			_absvalue >= 1e3, FORMAT(_measure, "#,##0,.00") & " K",
+			FORMAT(_measure, "#,##0.00")
+		)
+		RETURN
+		_formatted
+		```
+	lineageTag: 3efe38a9-1cf8-41d9-9fad-25ee4ae9cdb1
+
+function Top_Column = ```
+		(_val:anyref, _measure: expr, _column:anyref) =>
+		
+		var _table =
+		ADDCOLUMNS(
+			VALUES(_column),
+			"Measure",_measure
+		)
+		
+		var _topn =
+		TOPN(
+			_val,
+			_table,
+			[Measure],DESC
+		)
+		
+		var _concat = 
+		CONCATENATEX(
+			_topn,
+			_column,
+			", ",
+			[Measure],
+			DESC
+		)
+		
+		RETURN
+		_concat
+		```
+	lineageTag: 791433ed-0937-4afd-af5d-b2fa50d62375
+

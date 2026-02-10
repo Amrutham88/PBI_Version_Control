@@ -1,0 +1,13 @@
+DEFINE
+FUNCTION YoY_Change = (_measure:expr) =>
+var _mindate = MIN('Calendar'[Date])
+var _prevyearmindate = DATE(YEAR(_mindate)-1,MONTH(_mindate), DAY(_mindate))
+var _maxdate = MAX('Calendar'[Date])
+var _prevyearmaxdate = DATE(YEAR(_maxdate)-1,MONTH(_maxdate), DAY(_maxdate))
+var _prevyeardaterange = DATESBETWEEN('Calendar'[Date], _prevyearmindate, _prevyearmaxdate)
+var _prevyearvalue = CALCULATE(_measure, _prevyeardaterange)
+var _diff = _measure - _prevyearvalue
+var _pct = DIVIDE(_diff, _prevyearvalue)
+
+RETURN
+_pct

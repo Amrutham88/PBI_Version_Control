@@ -1,0 +1,56 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "ReportSection8c6618e311a99d690e0e",
+  "displayName": "CUSTOMER ANALYSIS",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#121C27'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "f9c896227cc5e041291c",
+      "target": "01ab347dc5a02821cad8",
+      "type": "NoFilter"
+    },
+    {
+      "source": "f9c896227cc5e041291c",
+      "target": "af510fdbacd0bd64cb0a",
+      "type": "NoFilter"
+    },
+    {
+      "source": "f9c896227cc5e041291c",
+      "target": "ecabf6b65d570e1919ee",
+      "type": "NoFilter"
+    },
+    {
+      "source": "f9c896227cc5e041291c",
+      "target": "20b602de300d29309a16",
+      "type": "NoFilter"
+    }
+  ]
+}

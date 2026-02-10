@@ -1,0 +1,56 @@
+table dim_tbl_cur
+	lineageTag: 7a253a34-d9ba-4c24-9d2a-479afe1fbd67
+
+	column City
+		dataType: string
+		lineageTag: 61dea4fa-b92c-4e70-b735-ca621b98c544
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: ae5df0ee-6fe4-4b1f-9077-c0a3ec87a948
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Code'
+		dataType: string
+		lineageTag: 98802a72-f181-4011-87f4-97bd9ab4c502
+		summarizeBy: none
+		sourceColumn: Currency Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Symbol'
+		dataType: string
+		lineageTag: 03b22cd8-9d63-40b7-b3f6-69dbfcd83812
+		summarizeBy: none
+		sourceColumn: Currency Symbol
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Conversion Factor to USD'
+		dataType: double
+		lineageTag: 4bb83356-a89d-49ee-9f80-f3b435a96f2f
+		summarizeBy: none
+		sourceColumn: Conversion Factor to USD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dim_tbl_cur = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("jdTBbtswDADQXwmMHosiLYr2bDtY2rVNg6RdMQQ90BZnCZPFgJKW5rpf2Vfsuk/Zl0y212MlATYvfhAlkfRuV6zwMPtK/L04LZ635RgXIZ6E9/xsPi9eT3dFLVULHcXIFszsE4NplW2jsCLryESXQnBOY4wsQGuwMVE6DcZBjDwo6FU0C5ofyDGxloRGvUWz+L6BIc2tEWrYz+1qE+Lfn79DnJ/Nzy/+59IyrSo0HWjPPilvjgIZGhBJufYGk6iWaEzGMe6ozTjGZ1B7z0n2xKqVxyRbkRKQVPdkxNR3dyEsq3WIf36Nlbq4nioVuleidVPJP1KV4l6ZTkIfU/eIwkaXYRXmQMfIipxLZ3p8+0YsYuJ9uj/6XkPfsBIdxtAGQYTNxMgTMRk3DH8NBsaS1OUwD/XJWInry5F9CddMfhqsKKxBd8DHFHsISRlBp9yjc3CA5GrK2vCA75K0Yuj3078s6jahi/vQfSn3AqH1NCUvcOlR72VKbY/C4HB5pbeOQY+jUT4PsJzg1dV0YtQNeR5/Aim7RnYyw5UCNSiRs+SStJjVBNZl4BtqgHNguJoGmSGDLoAPyuTsFFHTOAIp+UJ6kBn49R8=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [City = _t, Country = _t, #"Currency Code" = _t, #"Currency Symbol" = _t, #"Conversion Factor to USD" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"City", type text}, {"Country", type text}, {"Currency Code", type text}, {"Currency Symbol", type text}, {"Conversion Factor to USD", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

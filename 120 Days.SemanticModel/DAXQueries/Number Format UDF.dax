@@ -1,0 +1,13 @@
+DEFINE
+FUNCTION Number_Format = (_measure:expr) =>
+var _absvalue = ABS(_measure)
+var _formatted = 
+SWITCH(
+	TRUE(),
+	_absvalue >= 1e9, FORMAT(_measure, "#,##0,,,.00") & " bn",
+	_absvalue >= 1e6, FORMAT(_measure, "#,##0,,.00") & " M",
+	_absvalue >= 1e3, FORMAT(_measure, "#,##0,.00") & " K",
+	FORMAT(_measure, "#,##0.00")
+)
+RETURN
+_formatted

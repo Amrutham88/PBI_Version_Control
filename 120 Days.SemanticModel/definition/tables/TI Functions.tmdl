@@ -1,0 +1,141 @@
+table 'TI Functions'
+	lineageTag: 7300f85c-06c8-46ec-afc3-7f5471952a3b
+
+	measure 'Parallel Period Year' =
+			
+			
+			CALCULATE(
+			    [Total Sales],
+			    PARALLELPERIOD(
+			        'Calendar'[Date],
+			        -1,
+			        YEAR
+			    )
+			)
+		formatString: 0
+		lineageTag: 9fa558fb-54de-4cd3-8c15-e1f1e34c66c8
+
+	measure 'Parallel Period Month' =
+			
+			
+			CALCULATE(
+			    [Total Sales],
+			    PARALLELPERIOD(
+			        'Calendar'[Date],
+			        -1,
+			        MONTH
+			    )
+			)
+		lineageTag: 441aa97c-8d56-4d79-ad70-221274454799
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Parallel Period Quarter' =
+			
+			
+			CALCULATE(
+			    [Total Sales],
+			    PARALLELPERIOD(
+			        'Calendar'[Date],
+			        -1,
+			        QUARTER
+			    )
+			)
+		formatString: 0
+		lineageTag: d5bdc122-ecf8-4cd3-b1e9-76932e863745
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'DateAdd Month' =
+			
+			
+			CALCULATE(
+			    [Total Sales],
+			    DATEADD(
+			        'Calendar'[Date],
+			        -1,
+			        MONTH
+			    )
+			)
+		formatString: 0
+		lineageTag: 647d78f1-f6c2-4522-8bd2-2260602622d3
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'DateAdd Year' =
+			
+			
+			CALCULATE(
+			    [Total Sales],
+			    DATEADD(
+			        'Calendar'[Date],
+			        -1,
+			        YEAR
+			    )
+			)
+		formatString: 0
+		lineageTag: 4a70b962-2a19-4bce-a289-4a518fd3f6a0
+
+	measure 'DateAdd Quarter' =
+			
+			
+			CALCULATE(
+			    [Total Sales],
+			    DATEADD(
+			        'Calendar'[Date],
+			        -1,
+			        QUARTER
+			    )
+			)
+		formatString: 0
+		lineageTag: 97a556f2-5f46-4141-a04f-1f1e41c0aa4d
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Check Dates Context' = ```
+			
+			
+			CALCULATE(
+			    MIN('Calendar'[Date]),
+			    PARALLELPERIOD(
+			        'Calendar'[Date],
+			        -1,
+			        MONTH
+			    )
+			)
+			
+			& " to " &
+			
+			CALCULATE(
+			    MAX('Calendar'[Date]),
+			    PARALLELPERIOD(
+			        'Calendar'[Date],
+			        -1,
+			        MONTH
+			    )
+			)
+			
+			```
+		lineageTag: 15263a89-64db-4fc2-b618-4b5b861d9098
+
+	measure 'Start Of Month' =
+			
+			
+			STARTOFMONTH(
+			    'Calendar'[Date]
+			)
+		formatString: General Date
+		lineageTag: 517b79a0-3d96-4b24-8911-0f0d2b42a29d
+
+	partition 'TI Functions' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

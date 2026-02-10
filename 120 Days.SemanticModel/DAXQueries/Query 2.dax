@@ -1,0 +1,16 @@
+EVALUATE
+
+VAR _DATES = DATESBETWEEN('Calendar'[Date],"2019-01-01","2019-12-31")
+
+VAR _PP = PARALLELPERIOD(_DATES, -1, MONTH)
+
+VAR _RESULT = 
+
+ROW(
+    "Min", MINX(_PP,'Calendar'[Date]),
+    "Max", MAXX(_PP,'Calendar'[Date]),
+    "Count",COUNTROWS(_PP)
+)
+
+RETURN
+_RESULT

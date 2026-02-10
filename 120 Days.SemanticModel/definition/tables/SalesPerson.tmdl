@@ -1,0 +1,35 @@
+table SalesPerson
+	lineageTag: 41aaa64e-e7a3-4e9c-929b-db9e2fbac29a
+
+	column Sales_person_ID
+		dataType: string
+		lineageTag: cf912844-1cb2-4ee0-ac95-386ec7b326de
+		summarizeBy: none
+		sourceColumn: Sales_person_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales_person
+		dataType: string
+		lineageTag: bf4cd898-5700-4b25-b2b8-fbb99c0eb1c6
+		summarizeBy: none
+		sourceColumn: Sales_person
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SalesPerson = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Goutham\Desktop\Power BI Case Study.xlsx"), null, true),
+				    SalesPerson_Sheet = Source{[Item="SalesPerson",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(SalesPerson_Sheet,{{"Column1", type text}, {"Column2", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"Sales_person_ID", type text}, {"Sales_person", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

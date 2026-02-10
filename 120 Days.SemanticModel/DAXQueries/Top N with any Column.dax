@@ -1,0 +1,32 @@
+DEFINE
+FUNCTION Top_Column = (_val:anyref, _measure: expr, _column:anyref) =>
+
+var _table =
+ADDCOLUMNS(
+	VALUES(_column),
+	"Measure",_measure
+)
+
+var _topn =
+TOPN(
+	_val,
+	_table,
+	[Measure],DESC
+)
+
+var _concat = 
+CONCATENATEX(
+	_topn,
+	_column,
+	", ",
+	[Measure],
+	DESC
+)
+
+RETURN
+_concat
+
+EVALUATE
+SUMMARIZECOLUMNS(
+	"Answer",
+Top_Column(6,[Total Sales], Orders[State]))

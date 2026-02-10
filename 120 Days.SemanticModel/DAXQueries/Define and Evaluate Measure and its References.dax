@@ -1,0 +1,41 @@
+DEFINE
+    MEASURE 'Measures Table'[Total Sales] = CALCULATE(
+    SUM(
+    Orders[Sales Amount]
+    ),
+    FILTER(
+        Orders,
+        Orders[Returned (Y/N)] <> "Yes"
+    )
+)
+    MEASURE 'Discount Parameter'[Discount Parameter Value] = SELECTEDVALUE('Discount Parameter'[Discount Parameter])
+    MEASURE 'Measures Table'[Total Profit] = CALCULATE(
+    SUM(
+    Orders[Profit]
+    ),
+    FILTER(
+        Orders,
+        Orders[Returned (Y/N)] <> "Yes"
+    )
+)
+    MEASURE 'Measures Table'[Margin %] = DIVIDE(
+    [Total Profit],
+    [Total Sales],
+    0
+)
+    MEASURE 'Measures Table'[Predicted Profit] = [Total Sales] * (1 - 'Discount Parameter'[Discount Parameter Value]) * [Margin %]
+    MEASURE 'Measures Table'[Predicted Margin %] = DIVIDE(
+    [Predicted Profit],
+    [Total Sales],
+    0
+)
+
+EVALUATE
+    SUMMARIZECOLUMNS(
+        "Total Sales", [Total Sales],
+        "Discount Parameter Value", [Discount Parameter Value],
+        "Total Profit", [Total Profit],
+        "Margin %", [Margin %],
+        "Predicted Profit", [Predicted Profit],
+        "Predicted Margin %", [Predicted Margin %]
+    )

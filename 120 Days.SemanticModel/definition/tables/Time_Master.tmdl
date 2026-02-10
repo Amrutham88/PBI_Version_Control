@@ -1,0 +1,92 @@
+table Time_Master
+	lineageTag: 11f06490-3cca-41e7-8335-e270f4c5e6bc
+
+	column Date
+		formatString: General Date
+		lineageTag: a480141c-c4ef-455a-8555-b9baae56e82f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 072d9851-b87a-43f7-a4b0-287a5f42dfb2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		lineageTag: 932d1cf5-604b-4f2e-9854-8527d0ae6750
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month No'
+		formatString: 0
+		lineageTag: 78e4f1de-ca5e-4dba-9f9e-d4ce784afaff
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Month No]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: a3bbdf13-4063-4232-a119-3b2d91874335
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Year'
+		lineageTag: 9f222c02-3325-465e-9083-1c549ff15890
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Year]
+		sortByColumn: 'Month Year Sort'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Year Sort'
+		lineageTag: 2c600396-462d-4867-9a9f-33b5fb6bbd51
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Year Sort]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day
+		formatString: 0
+		lineageTag: fc9b64dd-1454-4893-b725-208c2ca682b6
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Day]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Time_Master = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    CALENDAR(
+				        MIN(Orders[Order Date]),
+				        MAX(Orders[Order Date])
+				    ),
+				    "Year",YEAR([Date]),
+				    "Month",FORMAT([Date],"MMM"),
+				    "Month No",MONTH([Date]),
+				    "Quarter","Q"&QUARTER([Date]),
+				    "Month Year", FORMAT([Date], "MMM YY"),
+				    "Month Year Sort", FORMAT([Date], "YYYYMM"),
+				    "Day", DAY([Date])
+				)
+
+	annotation PBI_Id = eccf00c6f8054f078b8f2a77358f020c
+

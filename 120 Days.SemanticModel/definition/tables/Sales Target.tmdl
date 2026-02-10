@@ -1,0 +1,102 @@
+table 'Sales Target'
+	lineageTag: 74a1c189-24a7-4700-b21e-d6e0eb776d25
+
+	measure Target2 = ```
+			
+			[Total Sales] - SUM('Sales Target'[Target]) 
+			```
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 174ae2d6-3234-41fb-a2a2-55acdafb7967
+
+	column State
+		dataType: string
+		lineageTag: 8311fbe3-49eb-4eb8-ac45-6c3e64a93fac
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: string
+		lineageTag: 97243dc9-c56a-4ea0-b928-e7d9e9472c79
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: dd7c2513-130f-4085-92fb-68696e5ff684
+		summarizeBy: none
+		sourceColumn: Month
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Target
+		dataType: int64
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 9b685e67-ca74-4a26-accf-7521b40e53fe
+		summarizeBy: none
+		sourceColumn: Target
+
+		annotation SummarizationSetBy = Automatic
+
+	column Concat1
+		dataType: string
+		lineageTag: 1fee3979-deb0-4470-b3fa-f7a9628abdaf
+		summarizeBy: none
+		sourceColumn: Concat1
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column =
+			
+			CALCULATE(
+			    [Total Sales],
+			    RELATEDTABLE(
+			        Orders
+			    )
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: d8600dfd-12b0-440e-9a8b-bbcdd18c40a4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Target Achieved' =
+			
+			var val1 = CALCULATE(MAX('Sales Target'[Year]),ALL('Sales Target'))
+			var val2 = CALCULATE(MAX('Sales Target'[Month]),ALL('Sales Target'),'Sales Target'[Year] = val1)
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    'Sales Target'[Column] >= 'Sales Target'[Target] && 'Sales Target'[Year] = val1 &&  'Sales Target'[Month] = val2, "Achieved",
+			    'Sales Target'[Column] < 'Sales Target'[Target] && 'Sales Target'[Year] = val1 &&  'Sales Target'[Month] = val2, "Not Achieved",
+			    BLANK()
+			)
+		lineageTag: b286dc62-5769-4114-b5af-da445fca38f4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Sales Target' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Goutham\Desktop\Power BI Case Study.xlsx"), null, true),
+				    #"Sales Target_Sheet" = Source{[Item="Sales Target",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Sales Target_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"State", type text}, {"Year", Int64.Type}, {"Month", Int64.Type}, {"Target", Int64.Type}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"Year", type text}, {"Month", type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type1", "Concat1", each [State] & "-" & [Year] & "-" & [Month])
+				in
+				    #"Added Custom"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,25 @@
+table Topn
+	lineageTag: 5231ee76-7d9b-4156-bf5b-0d9a849b7d19
+
+	column Value
+		formatString: 0
+		lineageTag: dcd1256a-1304-4098-a9d4-4d8c2cf3ac8f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Topn = calculated
+		mode: import
+		source =
+				
+				
+				GENERATESERIES(
+				    1,
+				    100,
+				    1
+				)
+
+	annotation PBI_Id = d08d5f14982d4fca8f2287f884fb4446
+

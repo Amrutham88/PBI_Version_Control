@@ -1,0 +1,126 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "a4be4b245c39a89dabd9",
+  "position": {
+    "x": 392.52925722474328,
+    "y": 319.15930260329594,
+    "z": 1000,
+    "height": 178.53355624552185,
+    "width": 887.77645091951285
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fact_tbl_cur"
+                        }
+                      },
+                      "Property": "Amount in Local Currency"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(fact_tbl_cur.Amount in Local Currency)",
+              "nativeQueryRef": "Sum of Amount in Local Currency"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fact_tbl_cur"
+                        }
+                      },
+                      "Property": "Amount in Global Currency"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(fact_tbl_cur.Amount in Global Currency)",
+              "nativeQueryRef": "Sum of Amount in Global Currency"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_tbl_cur"
+                    }
+                  },
+                  "Property": "Is Filtered"
+                }
+              },
+              "queryRef": "fact_tbl_cur.Is Filtered",
+              "nativeQueryRef": "Is Filtered"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_tbl_cur"
+                    }
+                  },
+                  "Property": "Has One Value"
+                }
+              },
+              "queryRef": "fact_tbl_cur.Has One Value",
+              "nativeQueryRef": "Has One Value"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_tbl_cur"
+                    }
+                  },
+                  "Property": "Correct Amount"
+                }
+              },
+              "queryRef": "fact_tbl_cur.Correct Amount",
+              "nativeQueryRef": "Correct Amount"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Aggregation": {
+                "Expression": {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "fact_tbl_cur"
+                      }
+                    },
+                    "Property": "Amount in Local Currency"
+                  }
+                },
+                "Function": 0
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

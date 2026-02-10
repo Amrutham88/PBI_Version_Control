@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "tabOrder": [
+    "Order By",
+    "Define and Evaluate Measure",
+    "Define and Evaluate Measure and its References",
+    "Define and Evaluate Column",
+    "Table Statistics",
+    "YoY UDF",
+    "YoY Change UDF",
+    "YoY Color UDF",
+    "Number Format UDF",
+    "Query 1",
+    "Top N with any Column",
+    "Query 2"
+  ],
+  "defaultTab": "Query 2"
+}

@@ -1,0 +1,117 @@
+createOrReplace
+
+	table Calendar
+		lineageTag: 75dc4076-7b58-4799-9e8e-6889a3bcaf2c
+
+		measure 'Running Sum with Dax' = ```
+				
+				
+				var _selectedmonth = SELECTEDVALUE('Calendar'[Month Year Sort])
+				
+				var _runningsum = 
+				
+				CALCULATE(
+				    [Total Sales],
+				    FILTER(
+				        ALL('Calendar'[Month Year], 'Calendar'[Month Year Sort], 'Calendar'[Year], 'Calendar'[Quarter], 'Calendar'[Month], 'Calendar'[Month No]),
+				        'Calendar'[Month Year Sort] <= _selectedmonth
+				    )
+				)
+				
+				RETURN
+				_runningsum
+				```
+			lineageTag: 960256e2-3e62-48c9-9815-a022d8ce8954
+
+			annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		column Date
+			formatString: General Date
+			lineageTag: b9319acb-e2f0-42d1-b749-17f945dbe170
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [Date]
+
+			annotation SummarizationSetBy = Automatic
+
+		column Year
+			dataType: string
+			lineageTag: dfcdcdc7-7690-4306-a955-95a7019acf92
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [Year]
+
+			annotation SummarizationSetBy = Automatic
+
+		column Month
+			lineageTag: f5dbe60d-2c68-4fef-9731-026fa53b8ac7
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [Month]
+			sortByColumn: 'Month No'
+
+			annotation SummarizationSetBy = Automatic
+
+		column 'Month No'
+			formatString: 0
+			lineageTag: 3c40b8f4-8dbb-41f8-bb26-5c84e7a1808f
+			summarizeBy: sum
+			isNameInferred
+			sourceColumn: [Month No]
+
+			annotation SummarizationSetBy = Automatic
+
+		column Quarter
+			lineageTag: 0a296c47-5513-49c0-8f6a-7cab1af5bb10
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [Quarter]
+
+			annotation SummarizationSetBy = Automatic
+
+		column 'Month Year'
+			lineageTag: 05ff45fc-ecf8-4717-ae79-c19cc8966aa0
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [Month Year]
+			sortByColumn: 'Month Year Sort'
+
+			annotation SummarizationSetBy = Automatic
+
+		column 'Month Year Sort'
+			lineageTag: 4e9b1878-4144-47f8-a82d-6a84a8f3050c
+			summarizeBy: none
+			isNameInferred
+			sourceColumn: [Month Year Sort]
+
+			annotation SummarizationSetBy = Automatic
+
+		column Day
+			formatString: 0
+			lineageTag: 3318e8bf-353a-4410-8c56-f5d4b30f70f0
+			summarizeBy: sum
+			isNameInferred
+			sourceColumn: [Day]
+
+			annotation SummarizationSetBy = Automatic
+
+		partition Calendar = calculated
+			mode: import
+			source =
+					
+					ADDCOLUMNS(
+					    CALENDAR(
+					        MIN(Orders[Order Date]),
+					        MAX(Orders[Order Date])
+					    ),
+					    "Year",YEAR([Date]),
+					    "Month",FORMAT([Date],"MMM"),
+					    "Month No",MONTH([Date]),
+					    "Quarter","Q"&QUARTER([Date]),
+					    "Month Year", FORMAT([Date], "MMM YY"),
+					    "Month Year Sort", FORMAT([Date], "YYYYMM"),
+					    "Day", DAY([Date])
+					)
+
+		annotation PBI_Id = 06fd3d4b601d4faebc4b5b48b10de7f0
+

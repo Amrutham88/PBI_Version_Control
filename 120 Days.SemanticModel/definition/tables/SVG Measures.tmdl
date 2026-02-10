@@ -1,0 +1,192 @@
+table 'SVG Measures'
+	lineageTag: f6c14b2d-512c-4ce9-9350-3d353e1a29b8
+
+	measure 'Progress Bar' = ```
+			
+			
+			var _imagewidth = 120
+			var _imageheight = 20
+			var _margin = ( ABS([Margin %]) * _imagewidth )
+			var _yaxisstart = ( _imageheight * 0.2 ) / 2
+			var _fillcolor = IF([Margin %] >= 0, "#4CAF50", "#F44336")
+			var _svg = 
+			"data:image/svg+xml;utf8, 
+			<svg width='"& _imagewidth &"' height='"& _imageheight &"' viewBox='0 0 "& _imagewidth &" "& _imageheight &"' xmlns='http://www.w3.org/2000/svg'>
+			  
+			  <!-- Background bar -->
+			  <rect 
+			    x='0' 
+			    y='"& _yaxisstart &"'
+			    width='"& _imagewidth * 0.8 &"' 
+			    height='"& _imageheight * 0.8 &"' 
+			    rx='10' 
+			    ry='10'
+			    fill='#E0E0E0' />
+			
+			  <!-- Progress bar -->
+			  <rect 
+			    x='0' 
+			    y='"& _yaxisstart &"'
+			    width='"& _margin &"' 
+			    height='"& _imageheight * 0.8 &"' 
+			    rx='10' 
+			    ry='10'
+			    fill='"& _fillcolor &"' />
+			</svg>
+			"
+			
+			RETURN
+			_svg
+			```
+		lineageTag: e947bd77-523a-4fea-802d-5b38d255135c
+		dataCategory: ImageUrl
+
+	measure 'Box Progress Bar' = ```
+			
+			
+			var _imagewidth = 260
+			var _imageheight = 24
+			var _margin = ABS([Margin %]) * _imagewidth
+			var _fillcolor = IF([Margin %] >= 0, "#4CAF50", "#F44336")
+			
+			var _svg = 
+			"data:image/svg+xml;utf8,
+			<svg width='"& _imagewidth &"' height='"& _imageheight &"' viewBox='0 0 "& _imagewidth &" "& _imageheight &"' xmlns='http://www.w3.org/2000/svg'>
+			
+			  <!-- Background rectangles (5 segments) -->
+			  <rect x='0'   y='2' width='48' height='20' rx='4' fill='#E0E0E0'/>
+			  <rect x='52'  y='2' width='48' height='20' rx='4' fill='#E0E0E0'/>
+			  <rect x='104' y='2' width='48' height='20' rx='4' fill='#E0E0E0'/>
+			  <rect x='156' y='2' width='48' height='20' rx='4' fill='#E0E0E0'/>
+			  <rect x='208' y='2' width='48' height='20' rx='4' fill='#E0E0E0'/>
+			
+			  <!-- Filled progress (30% → 1.5 rectangles) -->
+			  <defs>
+			    <clipPath id='progressClip'>
+			      <!-- total width = 5 * 48 + 4 * 4 = 256 -->
+			      <!-- 30% of 256 = 76.8 -->
+			      <rect x='0' y='0' width='"& _margin &"' height='24'/>
+			    </clipPath>
+			  </defs>
+			
+			  <g clip-path='url(#progressClip)'>
+			    <rect x='0'   y='2' width='48' height='20' rx='4' fill='"& _fillcolor &"'/>
+			    <rect x='52'  y='2' width='48' height='20' rx='4' fill='"& _fillcolor &"'/>
+			    <rect x='104' y='2' width='48' height='20' rx='4' fill='"& _fillcolor &"'/>
+			    <rect x='156' y='2' width='48' height='20' rx='4' fill='"& _fillcolor &"'/>
+			    <rect x='208' y='2' width='48' height='20' rx='4' fill='"& _fillcolor &"'/>
+			  </g>
+			
+			</svg>
+			"
+			
+			RETURN
+			_svg
+			```
+		lineageTag: c2546344-54c0-4bcd-a78d-31382a30d6fd
+		dataCategory: ImageUrl
+
+	measure 'Complete Card Visual' = ```
+			
+			
+			var _salesacheivedvalue = [Sales Acheived]
+			var _salesacheived = FORMAT(_salesacheivedvalue, "0.0%")
+			var _targetvalue = SELECTEDVALUE('Target Table'[Value]) / 100
+			var _target = FORMAT(_targetvalue,"0.0%")
+			var _togovalue = _targetvalue - _salesacheivedvalue
+			var _togo = FORMAT(_togovalue, "0.0%")
+			var _acheivedpctvalue = DIVIDE(_salesacheivedvalue,_targetvalue)
+			var _acheivedpct = FORMAT(_acheivedpctvalue,"0%")
+			var _progressbarflow = _salesacheivedvalue * 372
+			var _progressbartargetline = ( _targetvalue* 372 ) + 24
+			
+			var _svg = 
+			"data:image/svg+xml;utf8,
+			<svg width='420' height='220' viewBox='0 0 420 220' xmlns='http://www.w3.org/2000/svg'>
+			
+			  <defs>
+			    <linearGradient id='bgGrad' x1='0' y1='0' x2='1' y2='1'>
+			      <stop offset='0%' stop-color='#1c1b3a'/>
+			      <stop offset='100%' stop-color='#3b1c63'/>
+			    </linearGradient>
+			
+			    <filter id='glow'>
+			      <feGaussianBlur stdDeviation='4' result='coloredBlur'/>
+			      <feMerge>
+			        <feMergeNode in='coloredBlur'/>
+			        <feMergeNode in='SourceGraphic'/>
+			      </feMerge>
+			    </filter>
+			  </defs>
+			
+			  <!-- Background -->
+			  <rect width='420' height='220' rx='16' fill='url(#bgGrad)'/>
+			
+			  <!-- Title -->
+			  <text x='24' y='36' fill='#cfcdf7' font-size='14' font-family='Segoe UI, Arial'>
+			    Sales Acheived
+			  </text>
+			
+			  <!-- Achieved pill -->
+			  <rect x='270' y='18' rx='12' ry='12' width='120' height='26' fill='#6d4aff'/>
+			  <text x='330' y='36' text-anchor='middle' fill='#ffffff'
+			        font-size='12' font-family='Segoe UI, Arial'>
+			    Achieved: "& _acheivedpct &"
+			  </text>
+			
+			  <!-- Main Value -->
+			  <text x='24' y='90' fill='#ffffff' font-size='40'
+			        font-weight='700' font-family='Segoe UI, Arial'>
+			    "& _salesacheived &"
+			  </text>
+			
+			  <!-- Target -->
+			  <text x='24' y='115' fill='#bdbbe8' font-size='12'
+			        font-family='Segoe UI, Arial'>
+			    Target: "& _target &" | To Go: "& _togo &"
+			  </text>
+			
+			  <!-- Progress Bar Background -->
+			  <rect x='24' y='140' width='372' height='10' rx='5' fill='#3a3966'/>
+			
+			  <!-- Progress Bar Fill (60%) -->
+			  <rect x='24' y='140' width='"& _progressbarflow &"' height='10' rx='5'
+			        fill='#ff77ff' filter='url(#glow)'/>
+			
+			  <!-- 🎯 Target Marker at 90% -->
+			  <line x1='"& _progressbartargetline &"' y1='134' x2='"& _progressbartargetline &"' y2='156'
+			        stroke='#ffffff' stroke-width='2' opacity='0.9'/>
+			
+			  <!-- Optional target label -->
+			  <text x='"& _progressbartargetline &"' y='130' text-anchor='middle'
+			        fill='#ffffff' font-size='10'
+			        font-family='Segoe UI, Arial'>
+			    "& _target &"
+			  </text>
+			
+			  <!-- Progress Label -->
+			  <text x='210' y='168' text-anchor='middle'
+			        fill='#cfcdf7' font-size='12'
+			        font-family='Segoe UI, Arial'>
+			    "& _acheivedpct &" of Target
+			  </text>
+			
+			</svg>
+			"
+			RETURN
+			_svg
+			```
+		lineageTag: 7efd57ee-04f1-4631-82b6-271592f6f920
+
+	partition 'SVG Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

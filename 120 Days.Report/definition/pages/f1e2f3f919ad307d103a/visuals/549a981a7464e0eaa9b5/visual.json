@@ -1,0 +1,311 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "549a981a7464e0eaa9b5",
+  "position": {
+    "x": 11.465003809849629,
+    "y": 220.38285101155395,
+    "z": 0,
+    "height": 459.87404170619061,
+    "width": 942.67809103208049,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Calendar"
+                    }
+                  },
+                  "Property": "Year"
+                }
+              },
+              "queryRef": "Calendar.Year",
+              "nativeQueryRef": "Year",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Calendar"
+                    }
+                  },
+                  "Property": "Month"
+                }
+              },
+              "queryRef": "Calendar.Month",
+              "nativeQueryRef": "Month",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Measures Table"
+                    }
+                  },
+                  "Property": "Total Sales"
+                }
+              },
+              "queryRef": "Measures Table.Total Sales",
+              "nativeQueryRef": "Total Sales",
+              "format": "0"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TI Functions"
+                    }
+                  },
+                  "Property": "Parallel Period Year"
+                }
+              },
+              "queryRef": "TI Functions.Parallel Period Year",
+              "nativeQueryRef": "Parallel Period Year"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TI Functions"
+                    }
+                  },
+                  "Property": "DateAdd Year"
+                }
+              },
+              "queryRef": "TI Functions.DateAdd Year",
+              "nativeQueryRef": "DateAdd Year"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TI Functions"
+                    }
+                  },
+                  "Property": "Parallel Period Quarter"
+                }
+              },
+              "queryRef": "TI Functions.Parallel Period Quarter",
+              "nativeQueryRef": "Parallel Period Quarter"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TI Functions"
+                    }
+                  },
+                  "Property": "Parallel Period Month"
+                }
+              },
+              "queryRef": "TI Functions.Parallel Period Month",
+              "nativeQueryRef": "Parallel Period Month"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TI Functions"
+                    }
+                  },
+                  "Property": "Check Dates Context"
+                }
+              },
+              "queryRef": "TI Functions.Check Dates Context",
+              "nativeQueryRef": "Check Dates Context"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TI Functions"
+                    }
+                  },
+                  "Property": "Start Of Month"
+                }
+              },
+              "queryRef": "TI Functions.Start Of Month",
+              "nativeQueryRef": "Start Of Month"
+            }
+          ]
+        }
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "Calendar.Year"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Calendar.Month"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c91bb7e07404efc68b81",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Calendar"
+              }
+            },
+            "Property": "Year"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "87b0e0922f84e93ab4c8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Calendar"
+              }
+            },
+            "Property": "Month"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "fa0ccdfa9145d61fbcce",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Measures Table"
+              }
+            },
+            "Property": "Total Sales"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "558f944e04c8c6890cbd",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "TI Functions"
+              }
+            },
+            "Property": "Parallel Period Year"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6c7bcfba4af80c85205d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "TI Functions"
+              }
+            },
+            "Property": "DateAdd Year"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6b9bf9a986e7e82b8f0b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "TI Functions"
+              }
+            },
+            "Property": "Parallel Period Quarter"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "71a565f406e6947deca6",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "TI Functions"
+              }
+            },
+            "Property": "Parallel Period Month"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "62e99aa243be56b559f0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "TI Functions"
+              }
+            },
+            "Property": "Check Dates Context"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "515617a5a2e9052253b4",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "TI Functions"
+              }
+            },
+            "Property": "Start Of Month"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

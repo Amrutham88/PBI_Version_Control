@@ -1,0 +1,10 @@
+EVALUATE
+	ROW(
+		"Table", "Orders",
+		"Column", "First Purchase Year",
+		"Count", COUNT('Orders'[First Purchase Year]),
+		"Distinct Values", DISTINCTCOUNTNOBLANK('Orders'[First Purchase Year]),
+		"Null Count", COUNTROWS('Orders') - COUNT('Orders'[First Purchase Year]),
+		"Min", MIN('Orders'[First Purchase Year]),
+		"Max", MAX('Orders'[First Purchase Year])
+	)

@@ -1,0 +1,325 @@
+table 'Measures Table'
+	lineageTag: 233a4d97-3a5a-4198-9759-58b0dc7d3c03
+
+	measure 'Total Profit' =
+			
+			CALCULATE(
+			    SUM(
+			    Orders[Profit]
+			    ),
+			    FILTER(
+			        Orders,
+			        Orders[Returned (Y/N)] <> "Yes"
+			    )
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 7800dc59-d67f-4f5f-bd69-d394fcf34471
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Orders","TableItemName":"State (clusters)","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	measure 'Total Sales' =
+			
+			CALCULATE(
+			    SUM(
+			    Orders[Sales Amount]
+			    ),
+			    FILTER(
+			        Orders,
+			        Orders[Returned (Y/N)] <> "Yes"
+			    )
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 60aa91d5-f1b2-4911-b9d1-17c5abdb98c5
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Orders","TableItemName":"State (clusters)","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	measure 'Total Sales LY' =
+			
+			CALCULATE(
+			    [Total Sales],
+			    SAMEPERIODLASTYEAR(
+			        'Calendar'[Date]
+			    )
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 41181b06-f01a-4325-911b-70ba25844304
+
+	measure 'Margin %' =
+			
+			DIVIDE(
+			    [Total Profit],
+			    [Total Sales],
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: ab65e7d8-93f2-4071-86c5-ddb5a910c4f4
+
+	measure 'Predicted Profit' = ```
+			
+			[Total Sales] * (1 - 'Discount Parameter'[Discount Parameter Value]) * [Margin %]
+			
+			```
+		lineageTag: 8188e1d5-b283-426f-a6b1-341a0c330284
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Quantity' =
+			
+			CALCULATE(
+			    SUM(
+			        Orders[Quantity]
+			    ),
+			    FILTER(
+			        Orders,
+			        Orders[Returned (Y/N)] <> "Yes"
+			    )
+			)
+		formatString: 0
+		lineageTag: db582cc8-1e89-416a-97a1-f44e5591350b
+
+	measure 'Total Orders' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        Orders[Order ID]
+			    ),
+			    FILTER(
+			        Orders,
+			        Orders[Returned (Y/N)] <> "Yes"
+			    )
+			)
+		formatString: 0
+		lineageTag: cbbb19b8-8bb5-4b32-91b4-1a7834d2d8c5
+
+	measure 'YoY Growth' =
+			
+			DIVIDE(
+			    [Total Sales] - [Total Sales LY],
+			    [Total Sales LY],
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 47835bab-e282-4408-b616-af9ce312f1bf
+
+	measure 'Predicted Margin %' =
+			
+			DIVIDE(
+			    [Predicted Profit],
+			    [Total Sales],
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 00c06f57-a8d1-4946-8bf1-fdf17e64ba08
+
+	measure 'Average Discount' =
+			
+			AVERAGE(
+			    Orders[Discount]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 98b963e7-c7d7-42a7-a9da-4f1495b6ca91
+
+	measure '% Contribution' =
+			
+			DIVIDE(
+			    [Total Sales],
+			    [Cumulative Sales],
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 7b479b1a-d595-4a2e-9764-bcf94b10c70e
+
+	measure 'Customer Rank' = ```
+			
+			RANKX(
+			    ALL(Customer[Customer Name]),
+			    [Total Sales],
+			    , 
+			    DESC, 
+			    Skip)
+			
+			```
+		formatString: 0
+		lineageTag: 05864d31-b55e-43b4-a24e-e80415cdba15
+
+	measure 'Customer Rank2' =
+			
+			IF(
+						SELECTEDVALUE(Orders[Sales_Person_Name]) = BLANK(),
+						BLANK(),
+						RANKX(
+							ALL(Orders[Sales_Person_Name]),
+							[Total Sales],
+							,
+							DESC,
+							Skip
+						)
+					)
+		formatString: 0
+		lineageTag: 7f6724ce-6c79-43df-ac5f-dd684923f005
+
+	measure 'Cumulative Sales2' = ```
+			
+			VAR CurrentCustomerRank = [Customer Rank]  -- Use your rank measure
+			RETURN
+			SUMX(
+			    FILTER(
+			        ALL(Customer[Customer Name]),  -- Remove filters to include all customers
+			        [Customer Rank] <= CurrentCustomerRank
+			    ),
+			    [Total Sales]
+			)
+			
+			```
+		lineageTag: c23afa80-b34e-49fc-89a8-9965d372db35
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Pareto %' =
+			
+			DIVIDE(
+			    [Cumulative Sales2],
+			    [Cumulative Sales],
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e3700442-dc40-4c11-b27b-0e0dc87e509a
+
+	measure 'Total Returned Orders' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        Orders[Order ID]
+			    ),
+			    FILTER(
+			        Orders,
+			        Orders[Returned (Y/N)] = "Yes"
+			    )
+			)
+		formatString: 0
+		lineageTag: c8415772-33cb-43e4-a406-fdabe6ffb8a8
+
+	measure 'Returned Sales' =
+			
+			CALCULATE(
+			    SUM(
+			    Orders[Sales Amount]
+			    ),
+			    FILTER(
+			        Orders,
+			        Orders[Returned (Y/N)] = "Yes"
+			    )
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 7231e0c2-d295-4b0c-8cbe-175e792cf2fa
+
+	measure 'Return Rate' = ```
+			
+			DIVIDE(
+			    [Total Returned Orders],
+			    [Total Returned Orders] + [Total Orders],
+			    0
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: f8f1684d-da61-4364-853b-9c3f2b8d957c
+
+	measure 'Cumulative Sales' =
+			
+			CALCULATE(
+			    [Total Sales],
+			    ALL(
+			        Customer[Customer Name],Customer[Rank]
+			    )
+			)
+		lineageTag: 931c0a52-9ab3-4746-8c56-09f72ef96a38
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY Sales' =
+			
+			
+			var _mindate = MIN('Calendar'[Date])
+			var _maxdate = MAX('Calendar'[Date])
+			var _prevyeardaterange = DATEADD('Calendar'[Date],-1,YEAR)
+			var _prevyearvalue = CALCULATE(MAX('Calendar'[Date]),_prevyeardaterange)
+			
+			return
+			_prevyearvalue
+		formatString: General Date
+		lineageTag: 3e788912-8615-4b73-9973-74097983859f
+
+	measure 'YoY UDF Sales' = YoY_Value([Total Sales])
+		lineageTag: 0ce5ceac-fbdd-4e10-9ef0-9c312ac8c139
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY Change' = YoY_Change([Total Sales])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 884068d4-00b1-4b0e-b17c-b383140ed8b5
+
+	measure 'YoY Color' = YoY_Color([Total Sales])
+		lineageTag: 1661e05e-7755-45e8-90bb-adca4edc0eef
+
+	measure 'Formatted Sales' = ```
+			
+			Number_Format([Total Sales])
+			
+			```
+		lineageTag: 740fa4b1-d3e9-4d0d-a374-5c2cfb5b1485
+
+		formatStringDefinition = Number_Format([Total Sales])
+
+	measure 'TopN States' = Top_Column(5,[Total Sales], Orders[State])
+		lineageTag: f490ea78-8378-49c1-8401-d7732af7f361
+
+	measure Target = 1000000
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 6bfedce1-a01a-44e6-a8ee-43c1829fefd5
+
+	measure 'Sales Acheived' = [Total Sales] / [Target]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 0727896a-2fd0-466a-a29e-9086f70368b5
+
+	measure 'Highlight Months' =
+			
+			
+			var _val1 = SELECTEDVALUE('Calendar'[Month No])
+			var _val2 = VALUES(Time_Master[Month No])
+			
+			RETURN
+			IF(_val1 IN _val2 && HASONEVALUE('Calendar'[Month No]),"Light Green")
+		lineageTag: b0477019-b1f0-42d0-af5d-bc79f140da3f
+
+	measure 'Filter Blanks from Selected Months' =
+			
+			
+			CALCULATE(
+			    [Total Sales],
+			    ALLSELECTED('Calendar'[Month]),
+			    USERELATIONSHIP('Calendar'[Month Year], Time_Master[Month Year])
+			)
+		lineageTag: 0bf119a6-6179-41d8-beb0-22bcb7fd273f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Discount' = SUM(Orders[Discount])
+		lineageTag: 5b67bf35-9366-44f4-b96b-1451d29338aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Measures Table' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Measure = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Measure", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Measure"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Orders","TableItemName":"State (clusters)","ObjectType":4},"LinkType":"UsedInGroup"}]
+

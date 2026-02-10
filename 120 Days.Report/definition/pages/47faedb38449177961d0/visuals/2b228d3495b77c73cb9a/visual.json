@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "2b228d3495b77c73cb9a",
+  "position": {
+    "x": 36.810011982425777,
+    "y": 18.405005991212889,
+    "z": 1000,
+    "height": 89.571029157236055,
+    "width": 1206.1413926241512,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "For the quadrant chart, we just need to add two X axis constant lines and a Y axis constant line. Colors are formed by intersection of two colors, so we need to add colors accordingly."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

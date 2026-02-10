@@ -1,0 +1,429 @@
+table Orders
+	lineageTag: 2112df40-e580-409c-89cf-f02669e5f9f0
+
+	measure 'New Customers' = ```
+			
+			
+			var val1 = 2021
+			var val2 = 
+			FILTER(
+			    Orders)
+			```
+		lineageTag: e8aaec89-19fc-412e-a0c4-974e9762f5a4
+
+	measure 'Rating for Monetary' = ```
+			
+			var val1 = 
+			RANKX(
+			    ALL(Customer[Customer Name]),
+			    [Total Sales],
+			    , 
+			    ASC, 
+			    Skip)
+			
+			var val2 = 
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        Customer[Customer Name]),
+			        ALL(
+			            Customer[Customer Name]
+			        )
+			)
+			
+			RETURN
+			CEILING(
+			DIVIDE(
+			    val1 * 10,
+			    val2,
+			    0
+			),1
+			)
+			
+			```
+		formatString: 0
+		lineageTag: a5ac3d6f-2f5e-4066-8583-ead252d13171
+
+	measure 'Rating for Frequency' = ```
+			
+			var val1 = 
+			RANKX(
+			    ALL(Customer[Customer Name]),
+			    [Total Orders],
+			    , 
+			    ASC, 
+			    Skip)
+			
+			var val2 = 
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        Customer[Customer Name]),
+			        ALL(
+			            Customer[Customer Name]
+			        )
+			)
+			
+			RETURN
+			CEILING(
+			DIVIDE(
+			    val1 * 10,
+			    val2,
+			    0
+			),1
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 6005b475-a6b4-4764-b3cd-3f7b6c67075e
+
+	measure Maxx = ```
+			DATEDIFF(MAX(Orders[Order Date]),TODAY(),DAY)
+			
+			```
+		formatString: 0
+		lineageTag: 5b17933a-cd3e-4b34-93dd-27d8d8c1dd5e
+
+	measure 'Rating for Recency' = ```
+			
+			var val1 = 
+			RANKX(
+			    ALL(Customer[Customer Name]),
+			    [Maxx],
+			    , 
+			    DESC, 
+			    Skip)
+			
+			var val2 = 
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        Customer[Customer Name]),
+			        ALL(
+			            Customer[Customer Name]
+			        )
+			)
+			
+			RETURN
+			CEILING(
+			DIVIDE(
+			    val1 * 10,
+			    val2,
+			    0
+			),1
+			)
+			
+			```
+		formatString: 0
+		lineageTag: c0042892-795a-4ec3-85bf-cab81ac9a1b8
+
+	measure 'Final Rating (RFM)' =
+			
+			DIVIDE(
+			    3 * [Rating for Recency] + 3.5 * [Rating for Frequency] + 3.5 * [Rating for Monetary],
+			    10,
+			    0
+			)
+		lineageTag: 4fe5f488-dbff-4dea-ad65-73b0cc6adfe4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Segmentation =
+			
+			IF(
+			    [Final Rating (RFM)] <= 3,
+			    "   Low Valued",
+			    IF(
+			        [Final Rating (RFM)] < 7,
+			        "  Medium Valued",
+			        " High Valued"
+			    )
+			)
+		lineageTag: 56951a64-2d06-4ffe-a8ea-b579d9a8e7d5
+
+	column 'Row ID'
+		dataType: string
+		lineageTag: cb343c53-007e-40b0-b1db-e1034b92382d
+		summarizeBy: none
+		sourceColumn: Row ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: 56ad575b-8c15-4c98-b652-eef3a91e147d
+		summarizeBy: none
+		sourceColumn: Order ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8069c2a6-60ae-4c23-9940-161f8070fdba
+		summarizeBy: none
+		sourceColumn: Order Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: string
+		lineageTag: 2d5519ef-fd73-48ca-b27e-710bd5d4df06
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ship Mode'
+		dataType: string
+		lineageTag: bbe2640a-fe38-44df-99d3-cadf9892fe3f
+		summarizeBy: none
+		sourceColumn: Ship Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: 6593ef82-3429-4796-b1b0-b26503092813
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: ddb7328f-36c7-4599-af7c-8a6345756c51
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 493a3a46-d503-459c-a63e-5659bf4ce59c
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: de07b950-5aac-4713-bb52-9454efea9c87
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: d85f1d23-ebf0-41ed-a927-e9adbea604da
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Orders","TableItemName":"State (clusters)","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	column 'Postal Code'
+		dataType: string
+		lineageTag: 0b6ae8ef-e3e5-4541-8c11-1a12a320b362
+		summarizeBy: none
+		sourceColumn: Postal Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: a4085c02-d474-4e97-96af-fb493df5ef0d
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: 1fa1d791-3f88-494a-ba75-8c78655d6d20
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Amount'
+		dataType: double
+		lineageTag: 3e9d8ae0-e922-4273-a114-7dd40a08a248
+		summarizeBy: sum
+		sourceColumn: Sales Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f7a5e2c-34f0-4f73-8fc4-b57b20a1edcd
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: 06ec307c-c46b-44f8-a3d8-eae02f91d986
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Profit
+		dataType: double
+		lineageTag: a1e00721-61d4-4a31-86eb-d06b83cdb64b
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesPerson
+		dataType: string
+		lineageTag: 43d85f72-4eb3-4a80-bf5b-9bea8a50a24a
+		summarizeBy: none
+		sourceColumn: SalesPerson
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Returned (Y/N)'
+		dataType: string
+		lineageTag: c94190fb-430b-46a6-9ba8-d30717b6c2c3
+		summarizeBy: none
+		sourceColumn: Returned (Y/N)
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		lineageTag: ce59bff8-d7d8-4c52-9491-038f3b5b7e1c
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Concat1 '
+		dataType: string
+		lineageTag: 9e78d279-d996-422a-ae1c-192a256c6724
+		summarizeBy: none
+		sourceColumn: "Concat1 "
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Target'
+		dataType: int64
+		formatString: 0
+		lineageTag: 43f6a80d-95d2-4a50-9654-9da9f006273d
+		summarizeBy: sum
+		sourceColumn: Sales Target
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'First Purchase Year' =
+			
+			CALCULATE(
+			    YEAR(MIN(Orders[Order Date])),
+			    ALLEXCEPT(
+			        Orders,
+			        Orders[Customer ID]
+			    )
+			)
+		dataType: string
+		lineageTag: 04989147-af1e-4eee-8a65-13b36257c88c
+		summarizeBy: none
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales_Person_Name
+		dataType: string
+		lineageTag: afe439d1-0317-474a-a7a7-4dc12407ddc6
+		summarizeBy: none
+		sourceColumn: Sales_Person_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Clusters for State
+	column 'State (clusters)' = ```
+			VAR __ClusterValue = 
+				LOOKUPVALUE('ClusterMappingTable'[ClusterId], 'ClusterMappingTable'[State], 'Orders'[State])
+			
+			RETURN
+				SWITCH(
+					__ClusterValue,
+					BLANK(),
+					BLANK(),
+					CONCATENATE("Cluster", __ClusterValue)
+				)
+			```
+		lineageTag: 15d1c09e-62d3-42d0-864d-28e84dffef4b
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{
+				  "version": 0,
+				  "groupedColumns": [
+				    {
+				      "Column": {
+				        "Expression": {
+				          "SourceRef": {
+				            "Entity": "Orders"
+				          }
+				        },
+				        "Property": "State"
+				      }
+				    }
+				  ]
+				}
+
+		annotation GroupingDesignState = {"Version":0,"Sources":[{"Name":"o","Entity":"Orders"}],"GroupedColumns":[{"Column":{"Expression":{"SourceRef":{"Source":"o"}},"Property":"State"}}],"PartitionTable":{"Definition":{"TableDefinition":{"Version":2,"From":[{"Name":"m","Entity":"Measures Table"},{"Name":"o","Entity":"Orders"}],"Where":[],"OrderBy":[],"Select":[{"Column":{"Expression":{"TransformTableRef":{"Source":"output0"}},"Property":"Orders.State"},"Name":"Orders.State"},{"Column":{"Expression":{"TransformTableRef":{"Source":"output0"}},"Property":"clusterId"},"Name":"clusterId"}],"GroupBy":[],"Transform":[{"Name":"KMeansClustering","Algorithm":"KMeansClustering","Input":{"Parameters":[{"Literal":{"Value":"-1L"},"Name":"NumberOfClusters"}],"Table":{"Name":"input0","Columns":[{"Role":"Attribute","Expression":{"Measure":{"Expression":{"SourceRef":{"Source":"m"}},"Property":"Total Sales"},"Name":"Measures Table.Total Sales"}},{"Role":"Attribute","Expression":{"Measure":{"Expression":{"SourceRef":{"Source":"m"}},"Property":"Total Profit"},"Name":"Measures Table.Total Profit"}},{"Role":"Item","Expression":{"Column":{"Expression":{"SourceRef":{"Source":"o"}},"Property":"State"},"Name":"Orders.State"}}]}},"Output":{"Table":{"Name":"output0","Columns":[{"Expression":{"Column":{"Expression":{"TransformTableRef":{"Source":"input0"}},"Property":"Orders.State"},"Name":"Orders.State"}},{"Role":"Series","Expression":{"TransformOutputRoleRef":{"Role":"ClusterId"},"Name":"clusterId"}}]}}}]},"ItemIdColumns":["Orders.State"],"PartitionIdColumn":"clusterId","Partitions":[{"PartitionIds":[{"Literal":{"Value":"null"}}]}],"DefaultPartitionPrefix":"Cluster"},"Result":{"TableName":"ClusterMappingTable","PartitionIdColumn":"ClusterId","ItemIdMappings":[[{"PartitionTableColumn":{"Column":{"Expression":{"SourceRef":{"Entity":"ClusterMappingTable"}},"Property":"State"}},"SourceTableColumn":{"Column":{"Expression":{"SourceRef":{"Entity":"Orders"}},"Property":"State"}}}]]}}}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Discount Amount' = Orders[Discount] * Orders[Sales Amount]
+		lineageTag: 2deb5f73-d480-4bad-819a-1e8d5a601e4f
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Orders = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Goutham\Desktop\Power BI Case Study.xlsx"), null, true),
+				    Orders_Sheet = Source{[Item="Orders",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Orders_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Row ID", type text}, {"Order ID", type text}, {"Order Date", type date}, {"Year", type text}, {"Ship Mode", type text}, {"Customer ID", type text}, {"Segment", type text}, {"Country", type text}, {"City", type text}, {"State", type text}, {"Postal Code", type text}, {"Region", type text}, {"Product ID", type text}, {"Sales Amount", type number}, {"Quantity", Int64.Type}, {"Discount", type number}, {"Profit", type number}, {"SalesPerson", type text}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Changed Type", {"Order ID"}, Returns, {"Order ID"}, "Returns", JoinKind.LeftOuter),
+				    #"Expanded Returns" = Table.ExpandTableColumn(#"Merged Queries", "Returns", {"Returned"}, {"Returns.Returned"}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Expanded Returns",null,"No",Replacer.ReplaceValue,{"Returns.Returned"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Replaced Value",{{"Returns.Returned", "Returned (Y/N)"}}),
+				    #"Merged Queries2" = Table.NestedJoin(#"Renamed Columns", {"SalesPerson"}, SalesPerson, {"Sales_person_ID"}, "SalesPerson.1", JoinKind.LeftOuter),
+				    #"Expanded SalesPerson.1" = Table.ExpandTableColumn(#"Merged Queries2", "SalesPerson.1", {"Sales_person"}, {"Sales_person"}),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Expanded SalesPerson.1",{{"Sales_person", "Sales_Person_Name"}}),
+				    #"Inserted Month" = Table.AddColumn(#"Renamed Columns2", "Month", each Date.Month([Order Date]), Int64.Type),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Inserted Month",{{"Month", type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type1", "Concat1 ", each [State] & "-" & [Year] & "-" & [Month]),
+				    #"Merged Queries1" = Table.NestedJoin(#"Added Custom", {"Concat1 "}, #"Sales Target", {"Concat1"}, "Sales Target", JoinKind.LeftOuter),
+				    #"Expanded Sales Target" = Table.ExpandTableColumn(#"Merged Queries1", "Sales Target", {"Target"}, {"Target"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Expanded Sales Target",{{"Target", "Sales Target"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

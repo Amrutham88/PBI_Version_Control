@@ -1,0 +1,47 @@
+createOrReplace
+
+	ref table 'TI Functions'
+
+		measure 'DateAdd Month' =
+				
+				
+				CALCULATE(
+				    [Total Sales],
+				    DATEADD(
+				        'Calendar'[Date],
+				        -1,
+				        MONTH
+				    )
+				)
+			formatString: 0
+
+			annotation PBI_FormatHint = {"isDecimal":true}
+
+		measure 'DateAdd Year' =
+				
+				
+				CALCULATE(
+				    [Total Sales],
+				    DATEADD(
+				        'Calendar'[Date],
+				        -1,
+				        YEAR
+				    )
+				)
+			formatString: 0
+
+		measure 'DateAdd Quarter' =
+				
+				
+				CALCULATE(
+				    [Total Sales],
+				    DATEADD(
+				        'Calendar'[Date],
+				        -1,
+				        QUARTER
+				    )
+				)
+			formatString: 0
+
+			annotation PBI_FormatHint = {"isDecimal":true}
+

@@ -1,0 +1,18 @@
+DEFINE 
+FUNCTION YoY_Value = (_measure:expr) =>
+var _mindate = MIN('Calendar'[Date])
+var _prevyearmindate = DATE(YEAR(_mindate)-1, MONTH(_mindate), DAY(_mindate))
+var _maxdate = MAX('Calendar'[Date])
+var _prevyearmaxdate = DATE(YEAR(_maxdate)-1, MONTH(_maxdate), DAY(_maxdate))
+var _prevyeardaterange = DATESBETWEEN('Calendar'[Date], _prevyearmindate, _prevyearmaxdate)
+var _prevyearvalue = CALCULATE(_measure,_prevyeardaterange,ALLEXCEPT('Calendar', 'Calendar'[Date]))
+var _formatted = 
+SWITCH(
+	TRUE(),
+	_prevyearvalue >= 1e9, FORMAT(_prevyearvalue / 1e9, "0.00") & "bn",
+	_prevyearvalue >= 1e6, FORMAT(_prevyearvalue / 1e6, "0.00") & "M",
+	_prevyearvalue >= 1e3, FORMAT(_prevyearvalue / 1e3, "0.00") & "K",
+	FORMAT(_prevyearvalue,"0.00")
+)
+return
+"YoY: " & _formatted

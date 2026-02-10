@@ -1,0 +1,25 @@
+table 'Target Table'
+	lineageTag: ff14e159-2a76-41d5-8f2c-e3ccabed5f78
+
+	column Value
+		formatString: 0
+		lineageTag: f4d6d864-7b00-443d-9922-4e27765a0231
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Target Table' = calculated
+		mode: import
+		source =
+				
+				
+				GENERATESERIES(
+				    0,
+				    100,
+				    5
+				)
+
+	annotation PBI_Id = 8d1a43767af0489d9c48bbb4ecf502ee
+

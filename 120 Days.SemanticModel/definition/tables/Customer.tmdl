@@ -1,0 +1,223 @@
+table Customer
+	lineageTag: 273a4d92-31da-41ba-af8b-95cb90601e93
+
+	measure Measure
+		lineageTag: a0192cf9-8333-4f71-8d3d-8a43e6df61ff
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: 18e3562e-e45e-4458-93ca-5962a6875a35
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Name'
+		dataType: string
+		lineageTag: 028a3296-c1e2-4ffb-98ca-202be35c6dc7
+		summarizeBy: none
+		sourceColumn: Customer Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column =
+			
+			CALCULATE(
+			    [Total Sales],
+			    RELATEDTABLE(
+			        Orders
+			    )
+			)
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: bf8ea2ca-2682-40e6-bde5-ebf1ec69393a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rank =
+			
+			RANKX(
+			    Customer,
+			    Customer[Column],
+			    ,
+			    DESC,
+			    Skip
+			) * 100
+			/
+			COUNT(Customer[Customer ID])
+		formatString: 0.00
+		lineageTag: a6f93d8f-299f-4e24-af4c-90bdb8a04e99
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rating for Monetary' = ```
+			
+			var val1 = 
+			RANKX(
+			    ALL(Customer),
+			    [Total Sales],
+			    , 
+			    ASC, 
+			    Skip)
+			
+			var val2 = 
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        Customer[Customer Name]),
+			        ALL(
+			            Customer
+			        )
+			)
+			
+			var val3 = 
+			CEILING(
+			DIVIDE(
+			    val1 * 10,
+			    val2,
+			    0
+			),1
+			)
+			
+			return val3
+			```
+		formatString: 0
+		lineageTag: 9f3c511a-038d-4226-95a9-03ed72975150
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rating for Frequency' = ```
+			
+			var val1 = 
+			RANKX(
+			    ALL(Customer),
+			    [Total Orders],
+			    , 
+			    ASC, 
+			    Skip)
+			
+			var val2 = 
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        Customer[Customer Name]),
+			        ALL(
+			            Customer
+			        )
+			)
+			
+			RETURN
+			CEILING(
+			DIVIDE(
+			    val1 * 10,
+			    val2,
+			    0
+			),1
+			)
+			
+			```
+		formatString: 0
+		lineageTag: a322ec8f-6d66-4bb0-8beb-1d36fbb7fbee
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rating for Recency' = ```
+			
+			
+			
+			var val1 = 
+			RANKX(
+			    ALL(Customer),
+			    Customer[Last 180 days Sales],
+			    , 
+			    ASC, 
+			    Skip)
+			
+			var val2 = 
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        Customer[Customer Name]),
+			        ALL(
+			            Customer
+			        )
+			)
+			
+			var val3 = 
+			CEILING(
+			DIVIDE(
+			    val1 * 10,
+			    val2,
+			    0
+			),1
+			)
+			
+			return val3
+			```
+		formatString: 0
+		lineageTag: 11170680-26ef-4512-bedd-7d08f7262587
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Last 180 days Sales' =
+			
+			var max_date =  CALCULATE(MAX('Calendar'[Date]),ALL('Calendar'))
+			var last_180_days_sales = CALCULATE([Total Sales],FILTER(ALL('Calendar'),'Calendar'[Date] >= max_date - 180 && 'Calendar'[Date] <= max_date))
+			
+			return last_180_days_sales
+		lineageTag: 3393cec7-8bee-425d-9109-4424319db24d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Final Rating (RFM)' =
+			
+			DIVIDE(
+			    3 * Customer[Rating for Recency] + 3.5 * Customer[Rating for Frequency] + 3.5 * Customer[Rating for Monetary],
+			    10,
+			    0
+			)
+		lineageTag: 32c3a9aa-e6da-48a3-ac06-bcc7ffd6df1f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Segmentation =
+			
+			IF(
+			    Customer[Final Rating (RFM)] <= 3,
+			    "  Low Valued",
+			    IF(
+			        Customer[Final Rating (RFM)] < 7,
+			        " Medium Valued",
+			        "High Valued"
+			    )
+			)
+		lineageTag: 2c0e2fe1-55f4-411d-9643-bf5304cf98bf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customer = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Goutham\Desktop\Power BI Case Study.xlsx"), null, true),
+				    Customer_Sheet = Source{[Item="Customer",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Customer_Sheet,{{"Column1", type text}, {"Column2", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"Customer ID", type text}, {"Customer Name", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

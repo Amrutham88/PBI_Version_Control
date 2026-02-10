@@ -1,0 +1,38 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Orders","Customer","Product","Region Heads","Returns","SalesPerson","Sales Target","Measures Table","SVG Measures","fact_tbl_cur","dim_tbl_cur","TI Functions"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","TMDLView_Desktop","DevMode"]
+
+ref table Orders
+ref table Customer
+ref table Product
+ref table 'Region Heads'
+ref table Returns
+ref table 'Sales Target'
+ref table SalesPerson
+ref table 'Measures Table'
+ref table Calendar
+ref table 'Discount Parameter'
+ref table 'Top n Customers'
+ref table 'Office Supplies Table'
+ref table Topn
+ref table 'Field Parameter with automatic naming'
+ref table 'SVG Measures'
+ref table ClusterMappingTable
+ref table 'Target Table'
+ref table fact_tbl_cur
+ref table dim_tbl_cur
+ref table 'TI Functions'
+ref table Time_Master
+
+ref cultureInfo en-US
+

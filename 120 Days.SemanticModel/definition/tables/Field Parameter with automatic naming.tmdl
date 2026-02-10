@@ -1,0 +1,49 @@
+table 'Field Parameter with automatic naming'
+	lineageTag: 97682bed-e613-4ac7-a401-52691e2e36c3
+
+	column 'Automatic Field Parameter'
+		lineageTag: 495c3762-950a-4e20-bac8-5467ba0c8711
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Automatic Field Parameter Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Automatic Field Parameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Automatic Field Parameter Fields'
+		isHidden
+		lineageTag: 4f71b7ba-25ee-4931-9858-48a8316f80cc
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Automatic Field Parameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Automatic Field Parameter Order'
+		isHidden
+		formatString: 0
+		lineageTag: 2d50d386-c522-4ce8-aed4-5309fda70691
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Field Parameter with automatic naming' = calculated
+		mode: import
+		source =
+				{
+				    (MAX('Calendar'[Date]), NAMEOF('Measures Table'[Total Sales]), 0),
+				    ("Total Profit", NAMEOF('Measures Table'[Total Profit]), 1),
+				    ("Total Quantity", NAMEOF('Measures Table'[Total Quantity]), 2)
+				}
+
+	annotation PBI_Id = b0e6758d8eba4948a639f668cb158f0d
+

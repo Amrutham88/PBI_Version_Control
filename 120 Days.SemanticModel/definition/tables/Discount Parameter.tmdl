@@ -1,0 +1,27 @@
+table 'Discount Parameter'
+	lineageTag: de860fec-7f7f-44f2-9a43-83b33136f88d
+
+	measure 'Discount Parameter Value' = SELECTEDVALUE('Discount Parameter'[Discount Parameter])
+		lineageTag: baaa1dc4-e323-47ca-a5a6-5d6ef0a592a0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Discount Parameter'
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8e846727-9c8f-40a9-b9ca-2361e1a90e30
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition 'Discount Parameter' = calculated
+		mode: import
+		source = GENERATESERIES(0, 1, 0.01)
+
+	annotation PBI_Id = fa59f00942b24472a50c9ca6ced629d2
+
