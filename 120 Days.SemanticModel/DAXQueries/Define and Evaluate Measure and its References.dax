@@ -32,7 +32,7 @@ DEFINE
 
 EVALUATE
     SUMMARIZECOLUMNS(
-        "Total Sales", [Total Sales] * 1000,
+        "Total Sales", [Total Sales],
         "Discount Parameter Value", [Discount Parameter Value],
         "Total Profit", [Total Profit],
         "Margin %", [Margin %],
